@@ -97,17 +97,15 @@ RETRY_ENABLED = True
 RETRY_TIMES = 5
 RETRY_HTTP_CODES = [404, 400, 429, 500, 502, 503, 504]
 
-# MYSQL_URL = 'mysql+pymysql://root:ql@127.0.0.1:3306/crawlerdb?charset=utf8'
-MYSQL_URL = 'mysql+pymysql://makedbs:Make_123@10.10.1.188:3306/scrapydb?charset=utf8'
+MYSQL_URL = 'mysql+pymysql://root:ql@127.0.0.1:3306/crawlerdb?charset=utf8'
 
 
 # scrapy-redis配置
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.PriorityQueue'
+
 # 不清除队列, 断点续爬
 SCHEDULER_PERSIST = True
-REDIS_HOST = '10.10.1.187'
-REDIS_PORT = 26379
-# REDIS_HOST = '127.0.0.1'
-# REDIS_PORT = 6379
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
