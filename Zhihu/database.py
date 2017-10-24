@@ -35,7 +35,7 @@ class UserInfo(Base):
     thanked_count = Column(Integer)              # 个人成就-感谢
     favorited_count = Column(Integer)            # 个人成就-收藏
     following_count = Column(Integer)             # 关注
-    follower_count = Column(Integer)              # 关注者
+    follower_count = Column(Integer, index=True)              # 关注者
 
     text = Column(Text)     # json值
     create_time = Column(TIMESTAMP, server_default=func.now())
