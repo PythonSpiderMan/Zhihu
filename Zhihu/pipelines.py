@@ -28,6 +28,7 @@ class ZhihuPipeline(object):
             res['favorited_count'] = tmp_res['favorited_count']
             res['following_count'] = tmp_res['following_count']
             res['follower_count'] = tmp_res['follower_count']
+            res['gender'] = tmp_res['gender']
             res['text'] = json.dumps(tmp_res)
             try:
                 res['location'] = tmp_res['locations'][0]['name']
