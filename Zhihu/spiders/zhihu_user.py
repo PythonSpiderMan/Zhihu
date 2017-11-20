@@ -60,9 +60,6 @@ class ZhihuUserSpider(RedisSpider):
         user_item['user'] = infos
         yield user_item
 
-        # 判断关注和粉丝
-        user_id = infos['id']    # 当前用户id
-
         # 请求关注的人
         following_count = infos['following_count']
         if following_count > 0:
@@ -72,7 +69,7 @@ class ZhihuUserSpider(RedisSpider):
                 priority=10,
                 callback=self.following_parse,
                 meta={
-                    'children_user_id': user_id
+                    'children_url_token': url_token
                 }
             )
 
@@ -85,7 +82,7 @@ class ZhihuUserSpider(RedisSpider):
                 priority=5,
                 callback=self.followers_parse,
                 meta={
-                    'parent_user_id': user_id,
+                    'parent_url_token': url_token,
                 }
             )
 
@@ -94,7 +91,7 @@ class ZhihuUserSpider(RedisSpider):
         """
         关注信息
         """
-        children_user_id = response.meta['children_user_id']
+        children_url_token = response.meta['children_url_token']
         infos = json.loads(response.body)
         users = infos['data']
         # 请求关注的人的详细信息
@@ -103,8 +100,8 @@ class ZhihuUserSpider(RedisSpider):
 
             rela_item = RelationItem()
             rela = {}
-            rela['parent_user_id'] = user['id']
-            rela['children_user_id'] = children_user_id
+            rela['parent_url_token'] = user['url_token']
+            rela['children_url_token'] = children_url_token
             rela_item['rela'] = rela
             yield rela_item
 
@@ -112,7 +109,7 @@ class ZhihuUserSpider(RedisSpider):
                 self.user_info_url.format(url_token),
                 headers=self.headers,
                 callback=self.user_parse,
-                priority=18,
+                priority=19,
             )
 
         # 翻页
@@ -121,9 +118,9 @@ class ZhihuUserSpider(RedisSpider):
             yield scrapy.Request(
                 next_page,
                 headers=self.headers,
-                priority=20,
+                priority=18,
                 callback=self.following_parse,
-                meta={'children_user_id': children_user_id}
+                meta={'children_url_token': children_url_token}
             )
 
 
@@ -131,7 +128,7 @@ class ZhihuUserSpider(RedisSpider):
         """
         粉丝信息
         """
-        parent_user_id = response.meta['parent_user_id']
+        parent_url_token = response.meta['parent_url_token']
         infos = json.loads(response.body)
         users = infos['data']
         # 请求关注的人的详细信息
@@ -140,15 +137,15 @@ class ZhihuUserSpider(RedisSpider):
 
             rela_item = RelationItem()
             rela = {}
-            rela['parent_user_id'] = parent_user_id
-            rela['children_user_id'] = user['id']
+            rela['parent_url_token'] = parent_url_token
+            rela['children_url_token'] = user['url_token']
             rela_item['rela'] = rela
             yield rela_item
 
             yield scrapy.Request(
                 self.user_info_url.format(url_token),
                 headers=self.headers,
-                priority=14,
+                priority=16,
                 callback=self.user_parse,
             )
 
@@ -158,9 +155,9 @@ class ZhihuUserSpider(RedisSpider):
             yield scrapy.Request(
                 next_page,
                 headers=self.headers,
-                priority=16,
+                priority=14,
                 callback=self.followers_parse,
-                meta={'parent_user_id': parent_user_id}
+                meta={'parent_url_token': parent_url_token}
             )
 
 

@@ -47,8 +47,8 @@ class Relation(Base):
     __tablename__ = "t_zhihu_relation"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    parent_user_id = Column(String(100), index=True)
-    children_user_id = Column(String(100), index=True)
+    parent_url_token = Column(String(100), index=True)
+    children_url_token = Column(String(100), index=True)
     create_time = Column(TIMESTAMP, server_default=func.now())
 
 

@@ -97,8 +97,7 @@ RETRY_ENABLED = True
 RETRY_TIMES = 5
 RETRY_HTTP_CODES = [404, 400, 429, 500, 502, 503, 504]
 
-MYSQL_URL = 'mysql+pymysql://root:ql@127.0.0.1:3306/crawlerdb?charset=utf8'
-
+MYSQL_URL = 'mysql+pymysql://admin:admin@127.0.0.1:3306/crawlerdb?charset=utf8'
 
 # scrapy-redis配置
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
